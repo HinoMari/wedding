@@ -763,18 +763,35 @@
     e.preventDefault();
     const form = e.target;
     const data = new FormData(form);
-    const params = new URLSearchParams(data).toString();
+
+    // Собираем чекбоксы алкоголя вручную (несколько значений с одним name)
+    const alcoholKey = 'entry.174804934';
+    data.delete(alcoholKey);
+    const checked = form.querySelectorAll('input[name="' + alcoholKey + '"]:checked');
+    checked.forEach(cb => data.append(alcoholKey, cb.value));
+
+    // Если выбрано "Другое" и заполнен текст — добавляем его
+    const otherInput = document.getElementById('otherInput');
+    if (otherInput && otherInput.style.display !== 'none' && otherInput.value.trim()) {
+      data.append(alcoholKey, otherInput.value.trim());
+    }
+
+    // Строим тело запроса вручную чтобы дублирующиеся ключи сохранились
+    const parts = [];
+    for (const [key, val] of data.entries()) {
+      parts.push(encodeURIComponent(key) + '=' + encodeURIComponent(val));
+    }
+    const body = parts.join('&');
 
     fetch('https://docs.google.com/forms/d/e/1FAIpQLSdscf_k9vDtUivcVW2_vWUJImxdV9lE9xcD8hrbfaWBhIru7g/formResponse', {
       method: 'POST',
       mode: 'no-cors',
       headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-      body: params
+      body: body
     }).then(() => {
       form.style.display = 'none';
       document.getElementById('successMsg').classList.add('show');
     }).catch(() => {
-      // no-cors always triggers catch but data is still sent
       form.style.display = 'none';
       document.getElementById('successMsg').classList.add('show');
     });
