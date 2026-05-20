@@ -723,7 +723,7 @@
             <input type="checkbox" id="otherCheck" onchange="toggleOther(this)"><span>Другое</span>
           </label>
         </div>
-        <input type="text" name="entry.174804934" id="otherInput" placeholder="Введите свой вариант…" style="display:none; margin-top:12px;">
+        <input type="text" id="otherInput" placeholder="Введите свой вариант…" style="display:none; margin-top:12px;">
       </div>
 
       <div class="form-row">
@@ -762,28 +762,45 @@
   document.getElementById('rsvpForm').addEventListener('submit', function(e) {
     e.preventDefault();
     const form = e.target;
-    const data = new FormData(form);
+    const FORM_URL = 'https://docs.google.com/forms/d/e/1FAIpQLSdscf_k9vDtUivcVW2_vWUJImxdV9lE9xcD8hrbfaWBhIru7g/formResponse';
 
-    // Собираем чекбоксы алкоголя вручную (несколько значений с одним name)
+    const parts = [];
+
+    // Простые поля (text, select, radio)
+    const simpleFields = [
+      'entry.739424897',   // Имя
+      'entry.1388081771',  // Телефон/мессенджер
+      'entry.1701093875',  // Придёте?
+      'entry.1572088507',  // Количество гостей
+      'entry.669557655',   // Пожелания молодожёнам
+    ];
+    simpleFields.forEach(key => {
+      const el = form.querySelector('[name="' + key + '"]:not([type=checkbox]):not([type=radio])') ||
+                 form.querySelector('[name="' + key + '"]:checked') ||
+                 form.querySelector('[name="' + key + '"]');
+      if (el && el.value) parts.push(encodeURIComponent(key) + '=' + encodeURIComponent(el.value));
+    });
+
+    // Radio — Придёте?
+    const radio = form.querySelector('input[name="entry.1701093875"]:checked');
+    if (radio) parts.push('entry.1701093875=' + encodeURIComponent(radio.value));
+
+    // Чекбоксы алкоголя — каждый отдельно
     const alcoholKey = 'entry.174804934';
-    data.delete(alcoholKey);
-    const checked = form.querySelectorAll('input[name="' + alcoholKey + '"]:checked');
-    checked.forEach(cb => data.append(alcoholKey, cb.value));
+    const checked = form.querySelectorAll('input[name="' + alcoholKey + '"][type=checkbox]:checked');
+    checked.forEach(cb => parts.push(encodeURIComponent(alcoholKey) + '=' + encodeURIComponent(cb.value)));
 
-    // Если выбрано "Другое" и заполнен текст — добавляем его
+    // Поле "Другое" для алкоголя
     const otherInput = document.getElementById('otherInput');
     if (otherInput && otherInput.style.display !== 'none' && otherInput.value.trim()) {
-      data.append(alcoholKey, otherInput.value.trim());
+      parts.push(encodeURIComponent(alcoholKey) + '=' + encodeURIComponent(otherInput.value.trim()));
     }
 
-    // Строим тело запроса вручную чтобы дублирующиеся ключи сохранились
-    const parts = [];
-    for (const [key, val] of data.entries()) {
-      parts.push(encodeURIComponent(key) + '=' + encodeURIComponent(val));
-    }
-    const body = parts.join('&');
+    // Убираем дубли (radio мог добавиться дважды)
+    const unique = [...new Set(parts)];
+    const body = unique.join('&');
 
-    fetch('https://docs.google.com/forms/d/e/1FAIpQLSdscf_k9vDtUivcVW2_vWUJImxdV9lE9xcD8hrbfaWBhIru7g/formResponse', {
+    fetch(FORM_URL, {
       method: 'POST',
       mode: 'no-cors',
       headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
@@ -795,6 +812,7 @@
       form.style.display = 'none';
       document.getElementById('successMsg').classList.add('show');
     });
+  });
   });
 </script>
 
