@@ -377,13 +377,7 @@
     50% { transform: scaleY(0.5); opacity: 0.4; }
   }
 
-  /* Intersection observer reveal */
-  .reveal {
-    opacity: 0;
-    transform: translateY(32px);
-    transition: opacity 0.8s ease, transform 0.8s ease;
-  }
-  .reveal.visible { opacity: 1; transform: translateY(0); }
+  
 
   
   /* ── VENUE ── */
@@ -630,7 +624,7 @@
 
 <!-- VENUE SECTION -->
 <section class="venue-section">
-  <div class="section-title reveal">
+  <div class="section-title">
     <h2>Место проведения</h2>
     <p>Вилла · Московская область · Ярославское шоссе, 54 км</p>
     <p class="venue-desc">Большая вилла 1500 кв.м. с мангальной зоной, баней,<br>бассейном и парковкой на 15 машин. Более 30 спальных мест.</p>
@@ -654,7 +648,7 @@
     <div class="venue-dots" id="venueDots"></div>
   </div>
 
-  <div class="venue-map-block reveal">
+  <div class="venue-map-block">
     <div class="venue-map-left">
       <div class="venue-map-address">
         <div class="map-pin">📍</div>
@@ -678,11 +672,11 @@
 
 <!-- SCHEDULE SECTION -->
 <section class="schedule-section">
-  <div class="section-title reveal">
+  <div class="section-title">
     <h2>Программа дня</h2>
     <p>29 августа 2026 · Вилла в Воронцово</p>
   </div>
-  <div class="schedule-wrap reveal">
+  <div class="schedule-wrap">
     <div class="schedule-item">
       <div class="schedule-dot"></div>
       <div class="schedule-time">17:00 – 18:00</div>
@@ -716,7 +710,7 @@
 
 <!-- GIFT SECTION -->
 <section class="gift-section">
-  <div class="gift-inner reveal">
+  <div class="gift-inner">
     <div class="gift-ornament">✦</div>
     <p class="gift-text">Лучшими пожеланиями от Вас станет<br>вклад в бюджет нашей будущей семьи,<br>который поможет исполнить наши мечты!</p>
     <div class="gift-ornament">✦</div>
@@ -725,12 +719,12 @@
 
 <!-- RSVP FORM -->
 <section class="form-section" style="margin-top: 80px;">
-  <div class="section-title reveal">
+  <div class="section-title">
     <h2>Подтвердите участие</h2>
     <p>Пожалуйста, ответьте до 10 июля 2026</p>
   </div>
 
-  <div class="form-wrap reveal" id="formWrap">
+  <div class="form-wrap" id="formWrap">
     <!-- 
       ═══════════════════════════════════════════════════════
       ИНСТРУКЦИЯ: замените action="" на ссылку из Google Forms
@@ -818,14 +812,8 @@
 </footer>
 
 <script>
-  // Reveal on scroll
-  const reveals = document.querySelectorAll('.reveal');
-  const io = new IntersectionObserver(entries => {
-    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); io.unobserve(e.target); } });
-  }, { threshold: 0.05, rootMargin: '0px 0px -50px 0px' });
-  reveals.forEach(el => io.observe(el));
-  // Fallback: make all reveals visible after 1s
-  setTimeout(() => { reveals.forEach(el => el.classList.add('visible')); }, 1000);
+  
+  
 
   // Form submit via fetch (no page reload, works with Google Forms)
   document.getElementById('rsvpForm').addEventListener('submit', function(e) {
