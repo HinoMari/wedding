@@ -294,11 +294,11 @@
   .radio-group label {
     flex: 1;
     margin: 0;
-    padding: 14px 6px;
+    padding: 14px 8px;
     text-align: center;
     cursor: pointer;
-    font-size: 11px;
-    letter-spacing: 0.2em;
+    font-size: 12px;
+    letter-spacing: 0.25em;
     color: #111111;
     font-weight: 600;
     transition: all 0.25s;
@@ -439,7 +439,7 @@
   }
   /* ── MAP BLOCK ── */
   .venue-map-block {
-    max-width: 900px; margin: 32px auto 0;
+    max-width: 900px; margin: 0 auto;
     display: grid; grid-template-columns: 1fr 1.6fr;
     background: white; border-top: 3px solid var(--gold);
   }
@@ -588,12 +588,6 @@
     letter-spacing: 0.02em;
   }
 
-  .dresscode-note {
-    max-width: 680px; margin: 32px auto 0;
-    font-size: 15px; color: #444444;
-    text-align: center; line-height: 1.7;
-    font-style: italic; padding: 0 24px;
-  }
 </style>
 </head>
 <body>
@@ -638,8 +632,8 @@
 <section class="venue-section">
   <div class="section-title reveal">
     <h2>Место проведения</h2>
-    <p>Загородный дом · Московская область · Ярославское шоссе, 54 км</p>
-    <p class="venue-desc">Большой загородный дом 1500 кв.м. с банкетным залом, мангальной зоной,<br>баней, бассейном, парковкой на 15 машин. Более 30 спальных мест.</p>
+    <p>Вилла · Московская область · Ярославское шоссе, 54 км</p>
+    <p class="venue-desc">Большая вилла 1500 кв.м. с мангальной зоной, баней,<br>бассейном и парковкой на 15 машин. Более 30 спальных мест.</p>
   </div>
 
   <div class="venue-gallery">
@@ -703,7 +697,7 @@
       <div class="schedule-desc">
         <strong>Официальная часть</strong>
         <p>Торжественная церемония бракосочетания и праздничный банкет</p>
-        <span class="schedule-tag">👔 Дресс-код: Smart casual / торжественный · без белого цвета</span>
+        <span class="schedule-tag">👔 Дресс-код: официальный · без белого цвета</span>
       </div>
     </div>
     <div class="schedule-item">
@@ -712,10 +706,9 @@
       <div class="schedule-desc">
         <strong>Свободная программа</strong>
         <p>Бассейн, баня, бильярд, караоке, бир-понг и многое другое...</p>
-        <span class="schedule-tag">👗 Дресс-код: свободный* · без белого цвета</span>
+        <span class="schedule-tag">👗 Дресс-код: свободный · без белого цвета</span>
       </div>
     </div>
-    <p class="dresscode-note">* см. опрос ниже</p>
   </div>
 </section>
 
@@ -802,6 +795,7 @@
           <input type="radio" name="entry.669557655" value="Без разницы" id="party_maybe">
           <label for="party_maybe">Без разницы</label>
         </div>
+      </div>
       </div><!-- /extraFields -->
 
       <button type="submit" class="submit-btn"><span>Отправить ответ</span></button>
@@ -839,7 +833,6 @@
     const form = e.target;
     const FORM_URL = 'https://docs.google.com/forms/d/e/1FAIpQLSdscf_k9vDtUivcVW2_vWUJImxdV9lE9xcD8hrbfaWBhIru7g/formResponse';
 
-    // Создаём скрытую форму и отправляем через iframe — без диалога браузера
     const iframe = document.createElement('iframe');
     iframe.name = 'submit_iframe';
     iframe.style.display = 'none';
@@ -859,21 +852,17 @@
       hiddenForm.appendChild(input);
     }
 
-    // Текстовые поля
     ['entry.739424897','entry.1388081771'].forEach(key => {
       const el = form.querySelector('[name="' + key + '"]');
       if (el && el.value) addField(key, el.value);
     });
 
-    // Select
     const select = form.querySelector('[name="entry.1572088507"]');
     if (select && select.value) addField('entry.1572088507', select.value);
 
-    // Radio — Придёте?
     const radioAttend = form.querySelector('input[name="entry.1701093875"]:checked');
     if (radioAttend) addField('entry.1701093875', radioAttend.value);
 
-    // Чекбоксы алкоголя
     form.querySelectorAll('input[name="entry.174804934"]:checked').forEach(cb => {
       addField('entry.174804934', cb.value);
     });
@@ -882,14 +871,12 @@
       addField('entry.174804934', otherInput.value.trim());
     }
 
-    // Radio — вечер 2017
     const radio2017 = form.querySelector('input[name="entry.669557655"]:checked');
     if (radio2017) addField('entry.669557655', radio2017.value);
 
     document.body.appendChild(hiddenForm);
     hiddenForm.submit();
 
-    // Показать сообщение об успехе
     setTimeout(() => {
       form.style.display = 'none';
       document.getElementById('successMsg').classList.add('show');
@@ -926,7 +913,7 @@
     if (venueTimer) clearInterval(venueTimer);
     venueTimer = setInterval(() => goToSlide(venueIdx + 1), 10000);
   }
- 
+
   // Start auto-advance
   resetTimer();
 </script>
@@ -946,14 +933,13 @@
     const extra = document.getElementById('extraFields');
     if (extra) {
       extra.style.display = show ? 'block' : 'none';
-      // При скрытии — снимаем required и сбрасываем значения
-      extra.querySelectorAll('input, select, textarea').forEach(el => {
-        if (!show) {
+      if (!show) {
+        extra.querySelectorAll('input, select, textarea').forEach(el => {
           el.removeAttribute('required');
           if (el.type === 'radio' || el.type === 'checkbox') el.checked = false;
           else el.value = '';
-        }
-      });
+        });
+      }
     }
   }
 </script>
