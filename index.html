@@ -872,11 +872,6 @@
     }
     const body = parts.join('&');
 
-    // ОТЛАДКА — показывает что именно отправляется
-    console.log('=== ОТПРАВЛЯЕМ ===');
-    console.log(body);
-    alert('Отправляем:\n' + decodeURIComponent(body).replace(/&/g, '\n'));
-
     fetch('https://docs.google.com/forms/d/e/1FAIpQLSdscf_k9vDtUivcVW2_vWUJImxdV9lE9xcD8hrbfaWBhIru7g/formResponse', {
       method: 'POST',
       mode: 'no-cors',
@@ -940,6 +935,14 @@
     const extra = document.getElementById('extraFields');
     if (extra) {
       extra.style.display = show ? 'block' : 'none';
+      // При скрытии — снимаем required и сбрасываем значения
+      extra.querySelectorAll('input, select, textarea').forEach(el => {
+        if (!show) {
+          el.removeAttribute('required');
+          if (el.type === 'radio' || el.type === 'checkbox') el.checked = false;
+          else el.value = '';
+        }
+      });
     }
   }
 </script>
