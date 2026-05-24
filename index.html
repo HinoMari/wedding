@@ -10,12 +10,12 @@
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
   :root {
-    --cream: #f5ede3;
-    --gold: #8a6535;
-    --gold-light: #a07840;
-    --deep: #1a1008;
-    --brown: #2e1a08;
-    --blush: #c8a882;
+    --cream: #ffffff;
+    --gold: #7a5520;
+    --gold-light: #8a6530;
+    --deep: #111111;
+    --brown: #222222;
+    --blush: #cccccc;
   }
 
   html { scroll-behavior: smooth; }
@@ -27,7 +27,8 @@
     font-weight: 400;
     overflow-x: hidden;
     font-size: 18px;
-    color: #1a1008;
+    color: #111111;
+    background: #ffffff;
   }
 
   /* ── HERO ── */
@@ -237,7 +238,7 @@
 
   /* ── FORM ── */
   .form-section {
-    background: white;
+    background: #f8f8f8;
     padding: 80px 24px 100px;
   }
 
@@ -255,9 +256,9 @@
     font-size: 12px;
     letter-spacing: 0.35em;
     text-transform: uppercase;
-    color: #6b4a20;
+    color: #111111;
     margin-bottom: 10px;
-    font-weight: 500;
+    font-weight: 700;
   }
 
   input, select, textarea {
@@ -269,7 +270,7 @@
     font-family: 'Cormorant Garamond', serif;
     font-size: 22px;
     font-weight: 400;
-    color: #1a1008;
+    color: #111111;
     outline: none;
     transition: border-color 0.3s;
     appearance: none;
@@ -277,7 +278,7 @@
   input:focus, select:focus, textarea:focus {
     border-bottom-color: var(--gold);
   }
-  input::placeholder, textarea::placeholder { color: #a07840; opacity: 0.7; }
+  input::placeholder, textarea::placeholder { color: #888888; opacity: 1; }
 
   select { cursor: pointer; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23b89a6a' stroke-width='1.5' fill='none'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 4px center; padding-right: 28px; }
 
@@ -293,13 +294,13 @@
   .radio-group label {
     flex: 1;
     margin: 0;
-    padding: 14px 8px;
+    padding: 14px 6px;
     text-align: center;
     cursor: pointer;
-    font-size: 12px;
-    letter-spacing: 0.25em;
-    color: #2e1a08;
-    font-weight: 500;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    color: #111111;
+    font-weight: 600;
     transition: all 0.25s;
     border-right: 1px solid var(--blush);
     user-select: none;
@@ -314,13 +315,13 @@
   .submit-btn {
     width: 100%;
     margin-top: 48px;
-    padding: 20px;
-    background: var(--deep);
-    color: var(--gold-light);
+    padding: 22px;
+    background: #111111;
+    color: #ffffff;
     border: none;
     font-family: 'Jost', sans-serif;
-    font-weight: 200;
-    font-size: 11px;
+    font-weight: 600;
+    font-size: 13px;
     letter-spacing: 0.5em;
     text-transform: uppercase;
     cursor: pointer;
@@ -338,7 +339,8 @@
   }
   .submit-btn:hover::before { transform: translateX(0); }
   .submit-btn span { position: relative; z-index: 1; }
-  .submit-btn:hover span { color: white; }
+  .submit-btn span { color: #ffffff; font-weight: 600; }
+  .submit-btn:hover span { color: #ffffff; }
 
   /* ── SUCCESS ── */
   .success-msg {
@@ -386,6 +388,15 @@
   
   /* ── VENUE ── */
   .venue-section { padding: 80px 0 0; background: var(--cream); }
+  .venue-section .section-title h2 {
+    font-size: clamp(52px, 9vw, 90px);
+  }
+  .venue-section .section-title p {
+    font-size: 20px;
+  }
+  .venue-desc {
+    font-size: 28px !important;
+  }
   .venue-gallery {
     position: relative; max-width: 900px; margin: 0 auto 0;
     border-radius: 4px; overflow: hidden; aspect-ratio: 16/9;
@@ -420,14 +431,15 @@
   .venue-dots span.active { background: var(--gold); }
 
   .venue-desc {
-    font-size: 17px; color: var(--deep);
-    margin-top: 12px; line-height: 1.7;
+    color: #111111;
+    margin-top: 16px; line-height: 1.7;
     font-family: 'Cormorant Garamond', serif;
-    font-style: italic; font-size: 20px;
+    font-style: italic; font-size: 26px;
+    font-weight: 400;
   }
   /* ── MAP BLOCK ── */
   .venue-map-block {
-    max-width: 900px; margin: 0 auto;
+    max-width: 900px; margin: 32px auto 0;
     display: grid; grid-template-columns: 1fr 1.6fr;
     background: white; border-top: 3px solid var(--gold);
   }
@@ -443,7 +455,7 @@
     font-size: 26px; font-weight: 400; color: var(--deep);
     margin-bottom: 8px; line-height: 1.2;
   }
-  .map-addr-sub { font-size: 16px; color: #2e1a08; line-height: 1.7; font-weight: 400; }
+  .map-addr-sub { font-size: 16px; color: #222222; line-height: 1.7; font-weight: 400; }
   .map-open-link {
     display: block; margin-top: 16px;
     font-size: 11px; letter-spacing: 0.3em; text-transform: uppercase;
@@ -492,10 +504,10 @@
   .schedule-desc strong {
     display: block;
     font-family: 'Cormorant Garamond', serif;
-    font-size: 26px; font-weight: 400; color: var(--deep);
+    font-size: 26px; font-weight: 600; color: #111111;
     margin-bottom: 8px;
   }
-  .schedule-desc p { font-size: 18px; color: #1a1008; line-height: 1.7; font-weight: 400; }
+  .schedule-desc p { font-size: 18px; color: #111111; line-height: 1.7; font-weight: 400; }
   .schedule-tag {
     display: inline-block; margin-top: 12px;
     font-size: 12px; letter-spacing: 0.25em; text-transform: uppercase;
@@ -518,12 +530,12 @@
     border: 1.5px solid #a07840;
     border-radius: 2px;
     transition: all 0.2s;
-    color: #1a1008;
+    color: #111111;
     letter-spacing: 0;
     text-transform: none;
     font-family: 'Cormorant Garamond', serif;
     font-size: 20px;
-    font-weight: 400;
+    font-weight: 500;
   }
   .check-item:hover { border-color: var(--gold); }
   .check-item input[type=checkbox] { display: none; }
@@ -546,6 +558,42 @@
     background: rgba(184,154,106,0.07);
   }
 
+
+  /* ── GIFT ── */
+  .gift-section {
+    background: #111111;
+    padding: 80px 24px;
+    text-align: center;
+  }
+  .gift-inner {
+    max-width: 640px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 32px;
+  }
+  .gift-ornament {
+    color: var(--gold);
+    font-size: 22px;
+    opacity: 0.8;
+  }
+  .gift-text {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(22px, 4vw, 34px);
+    font-weight: 300;
+    font-style: italic;
+    color: #f0e6d6;
+    line-height: 1.7;
+    letter-spacing: 0.02em;
+  }
+
+  .dresscode-note {
+    max-width: 680px; margin: 32px auto 0;
+    font-size: 15px; color: #444444;
+    text-align: center; line-height: 1.7;
+    font-style: italic; padding: 0 24px;
+  }
 </style>
 </head>
 <body>
@@ -590,8 +638,8 @@
 <section class="venue-section">
   <div class="section-title reveal">
     <h2>Место проведения</h2>
-    <p>Вилла · Московская область · Ярославское шоссе, 54 км</p>
-    <p class="venue-desc">Большая и уютная вилла с 9 просторными спальнями,<br>более 30 спальных мест</p>
+    <p>Загородный дом · Московская область · Ярославское шоссе, 54 км</p>
+    <p class="venue-desc">Большой загородный дом 1500 кв.м. с банкетным залом, мангальной зоной,<br>баней, бассейном, парковкой на 15 машин. Более 30 спальных мест.</p>
   </div>
 
   <div class="venue-gallery">
@@ -655,7 +703,7 @@
       <div class="schedule-desc">
         <strong>Официальная часть</strong>
         <p>Торжественная церемония бракосочетания и праздничный банкет</p>
-        <span class="schedule-tag">👔 Дресс-код: официальный</span>
+        <span class="schedule-tag">👔 Дресс-код: Smart casual / торжественный · без белого цвета</span>
       </div>
     </div>
     <div class="schedule-item">
@@ -664,12 +712,23 @@
       <div class="schedule-desc">
         <strong>Свободная программа</strong>
         <p>Бассейн, баня, бильярд, караоке, бир-понг и многое другое...</p>
-        
+        <span class="schedule-tag">👗 Дресс-код: свободный* · без белого цвета</span>
       </div>
     </div>
+    <p class="dresscode-note">* см. опрос ниже</p>
   </div>
 </section>
 
+
+
+<!-- GIFT SECTION -->
+<section class="gift-section">
+  <div class="gift-inner reveal">
+    <div class="gift-ornament">✦</div>
+    <p class="gift-text">Лучшими пожеланиями от Вас станет<br>вклад в бюджет нашей будущей семьи,<br>который поможет исполнить наши мечты!</p>
+    <div class="gift-ornament">✦</div>
+  </div>
+</section>
 
 <!-- RSVP FORM -->
 <section class="form-section" style="margin-top: 80px;">
@@ -700,13 +759,14 @@
       <div class="form-row">
         <label>Придёте на торжество?</label>
         <div class="radio-group">
-          <input type="radio" name="entry.1701093875" value="Да, буду!" id="yes" checked>
+          <input type="radio" name="entry.1701093875" value="Да, буду!" id="yes" checked onchange="toggleFields(true)">
           <label for="yes">Да, буду!</label>
-          <input type="radio" name="entry.1701093875" value="К сожалению, нет" id="no">
+          <input type="radio" name="entry.1701093875" value="К сожалению, нет" id="no" onchange="toggleFields(false)">
           <label for="no">К сожалению, нет</label>
         </div>
       </div>
 
+      <div id="extraFields">
       <div class="form-row">
         <label>Количество гостей (включая вас)</label>
         <select name="entry.1572088507">
@@ -733,9 +793,16 @@
       </div>
 
       <div class="form-row">
-        <label>Пожелания молодожёнам (необязательно)</label>
-        <textarea name="entry.669557655" placeholder="Ваши тёплые слова…"></textarea>
-      </div>
+        <label>Будет ли Вам интересно после официальной части продолжить вечер в стиле 2017?</label>
+        <div class="radio-group">
+          <input type="radio" name="entry.8698200" value="Да" id="party_yes">
+          <label for="party_yes">Да</label>
+          <input type="radio" name="entry.8698200" value="Нет" id="party_no">
+          <label for="party_no">Нет</label>
+          <input type="radio" name="entry.8698200" value="Без разницы" id="party_maybe">
+          <label for="party_maybe">Без разницы</label>
+        </div>
+      </div><!-- /extraFields -->
 
       <button type="submit" class="submit-btn"><span>Отправить ответ</span></button>
     </form>
@@ -808,6 +875,7 @@
 
 <script>
   let venueIdx = 0;
+  let venueTimer = null;
   const venueSlides = document.querySelectorAll('.venue-slide');
   const dotsContainer = document.getElementById('venueDots');
 
@@ -815,7 +883,7 @@
   venueSlides.forEach((_, i) => {
     const dot = document.createElement('span');
     if (i === 0) dot.classList.add('active');
-    dot.onclick = () => goToSlide(i);
+    dot.onclick = () => { goToSlide(i); resetTimer(); };
     dotsContainer.appendChild(dot);
   });
 
@@ -827,10 +895,15 @@
     dotsContainer.children[venueIdx].classList.add('active');
   }
 
-  function slideVenue(dir) { goToSlide(venueIdx + dir); }
+  function slideVenue(dir) { goToSlide(venueIdx + dir); resetTimer(); }
 
-  // Auto-advance every 4s
-  setInterval(() => slideVenue(1), 10000);
+  function resetTimer() {
+    if (venueTimer) clearInterval(venueTimer);
+    venueTimer = setInterval(() => goToSlide(venueIdx + 1), 10000);
+  }
+
+  // Start auto-advance
+  resetTimer();
 </script>
 
 
@@ -839,6 +912,16 @@
     const inp = document.getElementById('otherInput');
     inp.style.display = cb.checked ? 'block' : 'none';
     if (!cb.checked) inp.value = '';
+  }
+</script>
+
+
+<script>
+  function toggleFields(show) {
+    const extra = document.getElementById('extraFields');
+    if (extra) {
+      extra.style.display = show ? 'block' : 'none';
+    }
   }
 </script>
 
