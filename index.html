@@ -795,11 +795,11 @@
       <div class="form-row">
         <label>Будет ли Вам интересно после официальной части продолжить вечер в стиле 2017?</label>
         <div class="radio-group">
-          <input type="radio" name="entry.8698200" value="Да" id="party_yes">
+          <input type="radio" name="entry.669557655" value="Да" id="party_yes">
           <label for="party_yes">Да</label>
-          <input type="radio" name="entry.8698200" value="Нет" id="party_no">
+          <input type="radio" name="entry.669557655" value="Нет" id="party_no">
           <label for="party_no">Нет</label>
-          <input type="radio" name="entry.8698200" value="Без разницы" id="party_maybe">
+          <input type="radio" name="entry.669557655" value="Без разницы" id="party_maybe">
           <label for="party_maybe">Без разницы</label>
         </div>
       </div><!-- /extraFields -->
@@ -859,10 +859,10 @@
     }
 
     // Radio — Вечер в стиле 2017
-    const radio2017 = form.querySelector('input[name="entry.8698200"]:checked');
+    const radio2017 = form.querySelector('input[name="entry.669557655"]:checked');
     if (radio2017) {
-      data.delete('entry.8698200');
-      data.append('entry.8698200', radio2017.value);
+      data.delete('entry.669557655');
+      data.append('entry.669557655', radio2017.value);
     }
 
     // Строим тело запроса вручную чтобы дублирующиеся ключи сохранились
@@ -871,6 +871,11 @@
       parts.push(encodeURIComponent(key) + '=' + encodeURIComponent(val));
     }
     const body = parts.join('&');
+
+    // ОТЛАДКА — показывает что именно отправляется
+    console.log('=== ОТПРАВЛЯЕМ ===');
+    console.log(body);
+    alert('Отправляем:\n' + decodeURIComponent(body).replace(/&/g, '\n'));
 
     fetch('https://docs.google.com/forms/d/e/1FAIpQLSdscf_k9vDtUivcVW2_vWUJImxdV9lE9xcD8hrbfaWBhIru7g/formResponse', {
       method: 'POST',
