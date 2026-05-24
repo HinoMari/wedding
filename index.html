@@ -837,53 +837,64 @@
   document.getElementById('rsvpForm').addEventListener('submit', function(e) {
     e.preventDefault();
     const form = e.target;
-    const data = new FormData(form);
+    const FORM_URL = 'https://docs.google.com/forms/d/e/1FAIpQLSdscf_k9vDtUivcVW2_vWUJImxdV9lE9xcD8hrbfaWBhIru7g/formResponse';
 
-    // Собираем чекбоксы алкоголя вручную (несколько значений с одним name)
-    const alcoholKey = 'entry.174804934';
-    data.delete(alcoholKey);
-    const checked = form.querySelectorAll('input[name="' + alcoholKey + '"]:checked');
-    checked.forEach(cb => data.append(alcoholKey, cb.value));
+    // Создаём скрытую форму и отправляем через iframe — без диалога браузера
+    const iframe = document.createElement('iframe');
+    iframe.name = 'submit_iframe';
+    iframe.style.display = 'none';
+    document.body.appendChild(iframe);
 
-    // Если выбрано "Другое" и заполнен текст — добавляем его
-    const otherInput = document.getElementById('otherInput');
-    if (otherInput && otherInput.style.display !== 'none' && otherInput.value.trim()) {
-      data.append(alcoholKey, otherInput.value.trim());
+    const hiddenForm = document.createElement('form');
+    hiddenForm.action = FORM_URL;
+    hiddenForm.method = 'POST';
+    hiddenForm.target = 'submit_iframe';
+    hiddenForm.style.display = 'none';
+
+    function addField(name, value) {
+      const input = document.createElement('input');
+      input.type = 'hidden';
+      input.name = name;
+      input.value = value;
+      hiddenForm.appendChild(input);
     }
+
+    // Текстовые поля
+    ['entry.739424897','entry.1388081771'].forEach(key => {
+      const el = form.querySelector('[name="' + key + '"]');
+      if (el && el.value) addField(key, el.value);
+    });
+
+    // Select
+    const select = form.querySelector('[name="entry.1572088507"]');
+    if (select && select.value) addField('entry.1572088507', select.value);
 
     // Radio — Придёте?
     const radioAttend = form.querySelector('input[name="entry.1701093875"]:checked');
-    if (radioAttend) {
-      data.delete('entry.1701093875');
-      data.append('entry.1701093875', radioAttend.value);
-    }
+    if (radioAttend) addField('entry.1701093875', radioAttend.value);
 
-    // Radio — Вечер в стиле 2017
-    const radio2017 = form.querySelector('input[name="entry.669557655"]:checked');
-    if (radio2017) {
-      data.delete('entry.669557655');
-      data.append('entry.669557655', radio2017.value);
-    }
-
-    // Строим тело запроса вручную чтобы дублирующиеся ключи сохранились
-    const parts = [];
-    for (const [key, val] of data.entries()) {
-      parts.push(encodeURIComponent(key) + '=' + encodeURIComponent(val));
-    }
-    const body = parts.join('&');
-
-    fetch('https://docs.google.com/forms/d/e/1FAIpQLSdscf_k9vDtUivcVW2_vWUJImxdV9lE9xcD8hrbfaWBhIru7g/formResponse', {
-      method: 'POST',
-      mode: 'no-cors',
-      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-      body: body
-    }).then(() => {
-      form.style.display = 'none';
-      document.getElementById('successMsg').classList.add('show');
-    }).catch(() => {
-      form.style.display = 'none';
-      document.getElementById('successMsg').classList.add('show');
+    // Чекбоксы алкоголя
+    form.querySelectorAll('input[name="entry.174804934"]:checked').forEach(cb => {
+      addField('entry.174804934', cb.value);
     });
+    const otherInput = document.getElementById('otherInput');
+    if (otherInput && otherInput.style.display !== 'none' && otherInput.value.trim()) {
+      addField('entry.174804934', otherInput.value.trim());
+    }
+
+    // Radio — вечер 2017
+    const radio2017 = form.querySelector('input[name="entry.669557655"]:checked');
+    if (radio2017) addField('entry.669557655', radio2017.value);
+
+    document.body.appendChild(hiddenForm);
+    hiddenForm.submit();
+
+    // Показать сообщение об успехе
+    setTimeout(() => {
+      form.style.display = 'none';
+      document.getElementById('successMsg').classList.add('show');
+    }, 500);
+  });
   });
 </script>
 
