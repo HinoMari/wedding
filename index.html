@@ -851,6 +851,20 @@
       data.append(alcoholKey, otherInput.value.trim());
     }
 
+    // Radio — Придёте?
+    const radioAttend = form.querySelector('input[name="entry.1701093875"]:checked');
+    if (radioAttend) {
+      data.delete('entry.1701093875');
+      data.append('entry.1701093875', radioAttend.value);
+    }
+
+    // Radio — Вечер в стиле 2017
+    const radio2017 = form.querySelector('input[name="entry.8698200"]:checked');
+    if (radio2017) {
+      data.delete('entry.8698200');
+      data.append('entry.8698200', radio2017.value);
+    }
+
     // Строим тело запроса вручную чтобы дублирующиеся ключи сохранились
     const parts = [];
     for (const [key, val] of data.entries()) {
