@@ -294,11 +294,11 @@
   .radio-group label {
     flex: 1;
     margin: 0;
-    padding: 14px 8px;
+    padding: 14px 6px;
     text-align: center;
     cursor: pointer;
-    font-size: 12px;
-    letter-spacing: 0.25em;
+    font-size: 11px;
+    letter-spacing: 0.2em;
     color: #111111;
     font-weight: 600;
     transition: all 0.25s;
@@ -377,7 +377,13 @@
     50% { transform: scaleY(0.5); opacity: 0.4; }
   }
 
-  
+  /* Intersection observer reveal */
+  .reveal {
+    opacity: 0;
+    transform: translateY(32px);
+    transition: opacity 0.8s ease, transform 0.8s ease;
+  }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
 
   
   /* ── VENUE ── */
@@ -433,7 +439,7 @@
   }
   /* ── MAP BLOCK ── */
   .venue-map-block {
-    max-width: 900px; margin: 0 auto;
+    max-width: 900px; margin: 32px auto 0;
     display: grid; grid-template-columns: 1fr 1.6fr;
     background: white; border-top: 3px solid var(--gold);
   }
@@ -582,6 +588,12 @@
     letter-spacing: 0.02em;
   }
 
+  .dresscode-note {
+    max-width: 680px; margin: 32px auto 0;
+    font-size: 15px; color: #444444;
+    text-align: center; line-height: 1.7;
+    font-style: italic; padding: 0 24px;
+  }
 </style>
 </head>
 <body>
@@ -624,10 +636,10 @@
 
 <!-- VENUE SECTION -->
 <section class="venue-section">
-  <div class="section-title">
+  <div class="section-title reveal">
     <h2>Место проведения</h2>
-    <p>Вилла · Московская область · Ярославское шоссе, 54 км</p>
-    <p class="venue-desc">Большая вилла 1500 кв.м. с мангальной зоной, баней,<br>бассейном и парковкой на 15 машин. Более 30 спальных мест.</p>
+    <p>Загородный дом · Московская область · Ярославское шоссе, 54 км</p>
+    <p class="venue-desc">Большой загородный дом 1500 кв.м. с банкетным залом, мангальной зоной,<br>баней, бассейном, парковкой на 15 машин. Более 30 спальных мест.</p>
   </div>
 
   <div class="venue-gallery">
@@ -648,7 +660,7 @@
     <div class="venue-dots" id="venueDots"></div>
   </div>
 
-  <div class="venue-map-block">
+  <div class="venue-map-block reveal">
     <div class="venue-map-left">
       <div class="venue-map-address">
         <div class="map-pin">📍</div>
@@ -672,11 +684,11 @@
 
 <!-- SCHEDULE SECTION -->
 <section class="schedule-section">
-  <div class="section-title">
+  <div class="section-title reveal">
     <h2>Программа дня</h2>
     <p>29 августа 2026 · Вилла в Воронцово</p>
   </div>
-  <div class="schedule-wrap">
+  <div class="schedule-wrap reveal">
     <div class="schedule-item">
       <div class="schedule-dot"></div>
       <div class="schedule-time">17:00 – 18:00</div>
@@ -691,7 +703,7 @@
       <div class="schedule-desc">
         <strong>Официальная часть</strong>
         <p>Торжественная церемония бракосочетания и праздничный банкет</p>
-        <span class="schedule-tag">👔 Дресс-код: официальный · без белого цвета</span>
+        <span class="schedule-tag">👔 Дресс-код: Smart casual / торжественный · без белого цвета</span>
       </div>
     </div>
     <div class="schedule-item">
@@ -700,9 +712,10 @@
       <div class="schedule-desc">
         <strong>Свободная программа</strong>
         <p>Бассейн, баня, бильярд, караоке, бир-понг и многое другое...</p>
-        <span class="schedule-tag">👗 Дресс-код: свободный · без белого цвета</span>
+        <span class="schedule-tag">👗 Дресс-код: свободный* · без белого цвета</span>
       </div>
     </div>
+    <p class="dresscode-note">* см. опрос ниже</p>
   </div>
 </section>
 
@@ -710,7 +723,7 @@
 
 <!-- GIFT SECTION -->
 <section class="gift-section">
-  <div class="gift-inner">
+  <div class="gift-inner reveal">
     <div class="gift-ornament">✦</div>
     <p class="gift-text">Лучшими пожеланиями от Вас станет<br>вклад в бюджет нашей будущей семьи,<br>который поможет исполнить наши мечты!</p>
     <div class="gift-ornament">✦</div>
@@ -719,12 +732,12 @@
 
 <!-- RSVP FORM -->
 <section class="form-section" style="margin-top: 80px;">
-  <div class="section-title">
+  <div class="section-title reveal">
     <h2>Подтвердите участие</h2>
     <p>Пожалуйста, ответьте до 10 июля 2026</p>
   </div>
 
-  <div class="form-wrap" id="formWrap">
+  <div class="form-wrap reveal" id="formWrap">
     <!-- 
       ═══════════════════════════════════════════════════════
       ИНСТРУКЦИЯ: замените action="" на ссылку из Google Forms
@@ -789,7 +802,6 @@
           <input type="radio" name="entry.669557655" value="Без разницы" id="party_maybe">
           <label for="party_maybe">Без разницы</label>
         </div>
-      </div>
       </div><!-- /extraFields -->
 
       <button type="submit" class="submit-btn"><span>Отправить ответ</span></button>
@@ -812,64 +824,66 @@
 </footer>
 
 <script>
-  
-  
+  // Reveal on scroll
+  const reveals = document.querySelectorAll('.reveal');
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); io.unobserve(e.target); } });
+  }, { threshold: 0.05, rootMargin: '0px 0px -50px 0px' });
+  reveals.forEach(el => io.observe(el));
+  // Fallback: make all reveals visible after 1s
+  setTimeout(() => { reveals.forEach(el => el.classList.add('visible')); }, 1000);
 
   // Form submit via fetch (no page reload, works with Google Forms)
   document.getElementById('rsvpForm').addEventListener('submit', function(e) {
     e.preventDefault();
     const form = e.target;
-    const FORM_URL = 'https://docs.google.com/forms/d/e/1FAIpQLSdscf_k9vDtUivcVW2_vWUJImxdV9lE9xcD8hrbfaWBhIru7g/formResponse';
+    const data = new FormData(form);
 
-    const iframe = document.createElement('iframe');
-    iframe.name = 'submit_iframe';
-    iframe.style.display = 'none';
-    document.body.appendChild(iframe);
+    // Собираем чекбоксы алкоголя вручную (несколько значений с одним name)
+    const alcoholKey = 'entry.174804934';
+    data.delete(alcoholKey);
+    const checked = form.querySelectorAll('input[name="' + alcoholKey + '"]:checked');
+    checked.forEach(cb => data.append(alcoholKey, cb.value));
 
-    const hiddenForm = document.createElement('form');
-    hiddenForm.action = FORM_URL;
-    hiddenForm.method = 'POST';
-    hiddenForm.target = 'submit_iframe';
-    hiddenForm.style.display = 'none';
-
-    function addField(name, value) {
-      const input = document.createElement('input');
-      input.type = 'hidden';
-      input.name = name;
-      input.value = value;
-      hiddenForm.appendChild(input);
-    }
-
-    ['entry.739424897','entry.1388081771'].forEach(key => {
-      const el = form.querySelector('[name="' + key + '"]');
-      if (el && el.value) addField(key, el.value);
-    });
-
-    const select = form.querySelector('[name="entry.1572088507"]');
-    if (select && select.value) addField('entry.1572088507', select.value);
-
-    const radioAttend = form.querySelector('input[name="entry.1701093875"]:checked');
-    if (radioAttend) addField('entry.1701093875', radioAttend.value);
-
-    form.querySelectorAll('input[name="entry.174804934"]:checked').forEach(cb => {
-      addField('entry.174804934', cb.value);
-    });
+    // Если выбрано "Другое" и заполнен текст — добавляем его
     const otherInput = document.getElementById('otherInput');
     if (otherInput && otherInput.style.display !== 'none' && otherInput.value.trim()) {
-      addField('entry.174804934', otherInput.value.trim());
+      data.append(alcoholKey, otherInput.value.trim());
     }
 
+    // Radio — Придёте?
+    const radioAttend = form.querySelector('input[name="entry.1701093875"]:checked');
+    if (radioAttend) {
+      data.delete('entry.1701093875');
+      data.append('entry.1701093875', radioAttend.value);
+    }
+
+    // Radio — Вечер в стиле 2017
     const radio2017 = form.querySelector('input[name="entry.669557655"]:checked');
-    if (radio2017) addField('entry.669557655', radio2017.value);
+    if (radio2017) {
+      data.delete('entry.669557655');
+      data.append('entry.669557655', radio2017.value);
+    }
 
-    document.body.appendChild(hiddenForm);
-    hiddenForm.submit();
+    // Строим тело запроса вручную чтобы дублирующиеся ключи сохранились
+    const parts = [];
+    for (const [key, val] of data.entries()) {
+      parts.push(encodeURIComponent(key) + '=' + encodeURIComponent(val));
+    }
+    const body = parts.join('&');
 
-    setTimeout(() => {
+    fetch('https://docs.google.com/forms/d/e/1FAIpQLSdscf_k9vDtUivcVW2_vWUJImxdV9lE9xcD8hrbfaWBhIru7g/formResponse', {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: body
+    }).then(() => {
       form.style.display = 'none';
       document.getElementById('successMsg').classList.add('show');
-    }, 500);
-  });
+    }).catch(() => {
+      form.style.display = 'none';
+      document.getElementById('successMsg').classList.add('show');
+    });
   });
 </script>
 
@@ -921,13 +935,14 @@
     const extra = document.getElementById('extraFields');
     if (extra) {
       extra.style.display = show ? 'block' : 'none';
-      if (!show) {
-        extra.querySelectorAll('input, select, textarea').forEach(el => {
+      // При скрытии — снимаем required и сбрасываем значения
+      extra.querySelectorAll('input, select, textarea').forEach(el => {
+        if (!show) {
           el.removeAttribute('required');
           if (el.type === 'radio' || el.type === 'checkbox') el.checked = false;
           else el.value = '';
-        });
-      }
+        }
+      });
     }
   }
 </script>
