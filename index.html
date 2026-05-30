@@ -785,7 +785,7 @@
           <label class="check-item"><input type="checkbox" name="entry.174804934" value="Шампанское"><span>Шампанское</span></label>
           <label class="check-item"><input type="checkbox" name="entry.174804934" value="Джин"><span>Джин</span></label>
           <label class="check-item"><input type="checkbox" name="entry.174804934" value="Настойка"><span>Настойка</span></label>
-          <label class="check-item"><input type="checkbox" name="entry.174804934" value="Не буду пить"><span>Не буду пить</span></label>
+          <label class="check-item"><input type="checkbox" name="entry.174804934" value="Не буду пить" id="noDrinkCheck" onchange="toggleNoDrink(this)"><span>Не буду пить</span></label>
           <label class="check-item check-other" id="otherCheckItem">
             <input type="checkbox" id="otherCheck" onchange="toggleOther(this)"><span>Другое</span>
           </label>
@@ -812,6 +812,7 @@
     
 
     <div class="success-msg" id="successMsg">
+      <p class="big" id="successEmoji">✦</p>
       <p class="big" id="successTitle">Спасибо!</p>
       <p id="successText"></p>
     </div>
@@ -838,49 +839,60 @@
   document.getElementById('rsvpForm').addEventListener('submit', function(e) {
     e.preventDefault();
     const form = e.target;
-    const data = new FormData(form);
 
-    // Собираем чекбоксы алкоголя вручную (несколько значений с одним name)
-    const alcoholKey = 'entry.174804934';
-    data.delete(alcoholKey);
-    const checked = form.querySelectorAll('input[name="' + alcoholKey + '"]:checked');
-    checked.forEach(cb => data.append(alcoholKey, cb.value));
-
-    // Если выбрано "Другое" и заполнен текст — добавляем его
-    const otherInput = document.getElementById('otherInput');
-    if (otherInput && otherInput.style.display !== 'none' && otherInput.value.trim()) {
-      data.append(alcoholKey, otherInput.value.trim());
-    }
-
-    // Radio — Придёте?
-    const radioAttend = form.querySelector('input[name="entry.1701093875"]:checked');
-    if (radioAttend) {
-      data.delete('entry.1701093875');
-      data.append('entry.1701093875', radioAttend.value);
-    }
-
-    // Radio — Вечер в стиле 2017
-    const radio2017 = form.querySelector('input[name="entry.669557655"]:checked');
-    if (radio2017) {
-      data.delete('entry.669557655');
-      data.append('entry.669557655', radio2017.value);
-    }
-
-    // Строим тело запроса вручную чтобы дублирующиеся ключи сохранились
+    const FORM_URL = 'https://docs.google.com/forms/d/e/1FAIpQLSdscf_k9vDtUivcVW2_vWUJImxdV9lE9xcD8hrbfaWBhIru7g/formResponse';
     const parts = [];
-    for (const [key, val] of data.entries()) {
-      parts.push(encodeURIComponent(key) + '=' + encodeURIComponent(val));
+
+    function addField(name, value) {
+      if (value) parts.push(encodeURIComponent(name) + '=' + encodeURIComponent(value));
     }
+
+    // Имя
+    const nameEl = form.querySelector('[name="entry.739424897"]');
+    if (nameEl) addField('entry.739424897', nameEl.value);
+
+    // Телефон/мессенджер
+    const phoneEl = form.querySelector('[name="entry.1388081771"]');
+    if (phoneEl) addField('entry.1388081771', phoneEl.value);
+
+    // Придёте?
+    const radioAttend = form.querySelector('input[name="entry.1701093875"]:checked');
+    const isYes = radioAttend && radioAttend.value === 'Да, буду!';
+    if (radioAttend) addField('entry.1701093875', radioAttend.value);
+
+    // Если да — собираем остальные поля
+    if (isYes) {
+      // Количество гостей
+      const select = form.querySelector('[name="entry.1572088507"]');
+      if (select && select.value) addField('entry.1572088507', select.value);
+
+      // Алкоголь — чекбоксы
+      const noDrink = form.querySelector('#noDrinkCheck');
+      if (noDrink && noDrink.checked) {
+        addField('entry.174804934', 'Не буду пить');
+      } else {
+        form.querySelectorAll('input[name="entry.174804934"]:checked').forEach(cb => {
+          addField('entry.174804934', cb.value);
+        });
+        const otherInput = document.getElementById('otherInput');
+        if (otherInput && otherInput.style.display !== 'none' && otherInput.value.trim()) {
+          addField('entry.174804934', otherInput.value.trim());
+        }
+      }
+
+      // Вечер в стиле 2017
+      const radio2017 = form.querySelector('input[name="entry.669557655"]:checked');
+      if (radio2017) addField('entry.669557655', radio2017.value);
+    }
+
     const body = parts.join('&');
 
-    fetch('https://docs.google.com/forms/d/e/1FAIpQLSdscf_k9vDtUivcVW2_vWUJImxdV9lE9xcD8hrbfaWBhIru7g/formResponse', {
+    fetch(FORM_URL, {
       method: 'POST',
       mode: 'no-cors',
       headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
       body: body
     }).then(() => {
-      const attending = form.querySelector('input[name="entry.1701093875"]:checked');
-      const isYes = attending && attending.value === 'Да, буду!';
       document.getElementById('successTitle').textContent = isYes ? 'Ждём вас! 🤍' : 'Спасибо! ✦';
       document.getElementById('successText').innerHTML = isYes
         ? 'Мы очень рады, что вы будете рядом с нами<br>в этот особенный день.<br><br>До встречи 29 августа! 🥂'
@@ -888,9 +900,14 @@
       form.style.display = 'none';
       document.getElementById('successMsg').classList.add('show');
     }).catch(() => {
+      document.getElementById('successTitle').textContent = isYes ? 'Ждём вас! 🤍' : 'Спасибо! ✦';
+      document.getElementById('successText').innerHTML = isYes
+        ? 'Мы очень рады, что вы будете рядом с нами<br>в этот особенный день.<br><br>До встречи 29 августа! 🥂'
+        : 'Нам жаль, что вы не сможете быть с нами.<br>Спасибо, что нашли время ответить.<br>Будем думать о вас! 🤍';
       form.style.display = 'none';
       document.getElementById('successMsg').classList.add('show');
     });
+  });
   });
 </script>
 
@@ -929,6 +946,12 @@
 
 
 <script>
+  function toggleOther(cb) {
+    const inp = document.getElementById('otherInput');
+    inp.style.display = cb.checked ? 'block' : 'none';
+    if (!cb.checked) inp.value = '';
+  }
+
   function toggleNoDrink(cb) {
     const allChecks = document.querySelectorAll('.alcohol-grid input[type=checkbox]');
     allChecks.forEach(el => {
@@ -937,14 +960,9 @@
       el.disabled = cb.checked;
       el.closest('.check-item').style.opacity = cb.checked ? '0.35' : '1';
     });
+    // скрыть поле другое
     const inp = document.getElementById('otherInput');
     if (inp) { inp.style.display = 'none'; inp.value = ''; }
-  }
-
-  function toggleOther(cb) {
-    const inp = document.getElementById('otherInput');
-    inp.style.display = cb.checked ? 'block' : 'none';
-    if (!cb.checked) inp.value = '';
   }
 </script>
 
@@ -961,8 +979,6 @@
           else el.value = '';
         });
       }
-    }
-  });
     }
   }
 </script>
