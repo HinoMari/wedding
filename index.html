@@ -729,13 +729,20 @@
   </div>
 </section>
 
-section class="form-section" style="margin-top: 80px;">
+<!-- RSVP FORM -->
+<section class="form-section" style="margin-top: 80px;">
   <div class="section-title reveal">
     <h2>Подтвердите участие</h2>
     <p>Пожалуйста, ответьте до 10 июля 2026</p>
   </div>
 
   <div class="form-wrap reveal" id="formWrap">
+    <!-- 
+      ═══════════════════════════════════════════════════════
+      ИНСТРУКЦИЯ: замените action="" на ссылку из Google Forms
+      Как это сделать — читай в описании ниже
+      ═══════════════════════════════════════════════════════
+    -->
     <form id="rsvpForm">
 
       <div class="form-row">
@@ -759,49 +766,58 @@ section class="form-section" style="margin-top: 80px;">
       </div>
 
       <div id="extraFields">
-        <div class="form-row">
-          <label>Количество гостей (включая вас)</label>
-          <select id="guestCount" name="entry.1572088507" required>
-            <option value="" disabled selected hidden>Выберите...</option>
-            <option value="Только я - 1 гость">Только я — 1 гость</option>
-            <option value="Я + партнёр - 2 гостя">Я + партнёр — 2 гостя</option>
-          </select>
-        </div>
+      <div class="form-row">
+        <label>Количество гостей (включая вас)</label>
+        <select id="guestCount" name="entry.1572088507">
+          <option value="" disabled selected hidden>Выберите...</option>
+          <option value="Только я — 1 гость">Только я — 1 гость</option>
+          <option value="Я + партнёр — 2 гостя">Я + партнёр — 2 гостя</option>
+        </select>
+      </div>
 
-        <div class="form-row">
-          <label>Пожелания по алкоголю</label>
-          <div class="alcohol-grid">
-            <label class="check-item"><input type="checkbox" name="entry.174804934" value="Водка"><span>Водка</span></label>
-            <label class="check-item"><input type="checkbox" name="entry.174804934" value="Пиво"><span>Пиво</span></label>
-            <label class="check-item"><input type="checkbox" name="entry.174804934" value="Вино"><span>Вино</span></label>
-            <label class="check-item"><input type="checkbox" name="entry.174804934" value="Шампанское"><span>Шампанское</span></label>
-            <label class="check-item"><input type="checkbox" name="entry.174804934" value="Джин"><span>Джин</span></label>
-            <label class="check-item"><input type="checkbox" name="entry.174804934" value="Настойка"><span>Настойка</span></label>
-            <label class="check-item"><input type="checkbox" name="entry.174804934" value="Не буду пить" id="noDrink"><span>Не буду пить</span></label>
-          </div>
+      <div class="form-row">
+        <label>Пожелания по алкоголю</label>
+        <div class="alcohol-grid">
+          <label class="check-item"><input type="checkbox" name="entry.174804934" value="Водка"><span>Водка</span></label>
+          <label class="check-item"><input type="checkbox" name="entry.174804934" value="Пиво"><span>Пиво</span></label>
+          <label class="check-item"><input type="checkbox" name="entry.174804934" value="Вино"><span>Вино</span></label>
+          <label class="check-item"><input type="checkbox" name="entry.174804934" value="Шампанское"><span>Шампанское</span></label>
+          <label class="check-item"><input type="checkbox" name="entry.174804934" value="Джин"><span>Джин</span></label>
+          <label class="check-item"><input type="checkbox" name="entry.174804934" value="Настойка"><span>Настойка</span></label>
+          <label class="check-item"><input type="checkbox" name="entry.174804934" value="Не буду пить"><span>Не буду пить</span></label>
+          <label class="check-item check-other" id="otherCheckItem">
+            <input type="checkbox" id="otherCheck" onchange="toggleOther(this)"><span>Другое</span>
+          </label>
         </div>
+        <input type="text" name="entry.174804934" id="otherInput" placeholder="Введите свой вариант…" style="display:none; margin-top:12px;">
+      </div>
 
-        <div class="form-row">
-          <label>Будет ли Вам интересно после официальной части продолжить вечер в стиле 2017?</label>
-          <div class="radio-group">
-            <input type="radio" name="entry.669557655" value="Да" id="party_yes">
-            <label for="party_yes">Да</label>
-            <input type="radio" name="entry.669557655" value="Нет" id="party_no">
-            <label for="party_no">Нет</label>
-            <input type="radio" name="entry.669557655" value="Без разницы" id="party_maybe">
-            <label for="party_maybe">Без разницы</label>
-          </div>
+      <div class="form-row">
+        <label>Будет ли Вам интересно после официальной части продолжить вечер в стиле 2017?</label>
+        <div class="radio-group">
+          <input type="radio" name="entry.669557655" value="Да" id="party_yes">
+          <label for="party_yes">Да</label>
+          <input type="radio" name="entry.669557655" value="Нет" id="party_no">
+          <label for="party_no">Нет</label>
+          <input type="radio" name="entry.669557655" value="Без разницы" id="party_maybe">
+          <label for="party_maybe">Без разницы</label>
         </div>
       </div>
+      </div><!-- /extraFields -->
 
       <button type="submit" class="submit-btn"><span>Отправить ответ</span></button>
     </form>
 
+    <!-- Скрытый iframe нужен чтобы страница не перезагружалась -->
+    
+
     <div class="success-msg" id="successMsg">
+      <!-- shown when attending -->
       <div id="successYes" style="display:none">
         <p class="big">Ура! Ждём вас ✦</p>
         <p>Мы получили ваш ответ и безумно рады,<br>что вы разделите с нами этот особенный день.<br>До встречи 29 августа — будет незабываемо! 🥂</p>
       </div>
+      <!-- shown when not attending -->
       <div id="successNo" style="display:none">
         <p class="big">Спасибо ✦</p>
         <p>Жаль, что вы не сможете быть рядом.<br>Мы всё равно будем думать о вас в этот день<br>и держать вас в своих сердцах. 🤍</p>
@@ -810,129 +826,201 @@ section class="form-section" style="margin-top: 80px;">
   </div>
 </section>
 
+<!-- FOOTER -->
 <footer>
   <span class="hearts">♡</span>
   Ная &amp; Вадим · 29 августа 2026
 </footer>
 
 <script>
-// Reveal on scroll
-const reveals = document.querySelectorAll('.reveal');
-const io = new IntersectionObserver(entries => {
-  entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); io.unobserve(e.target); } });
-}, { threshold: 0.05, rootMargin: '0px 0px -50px 0px' });
-reveals.forEach(el => io.observe(el));
-setTimeout(() => { reveals.forEach(el => el.classList.add('visible')); }, 1000);
+  // Reveal on scroll
+  const reveals = document.querySelectorAll('.reveal');
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); io.unobserve(e.target); } });
+  }, { threshold: 0.05, rootMargin: '0px 0px -50px 0px' });
+  reveals.forEach(el => io.observe(el));
+  // Fallback: make all reveals visible after 1s
+  setTimeout(() => { reveals.forEach(el => el.classList.add('visible')); }, 1000);
 
-// Venue slider (оставлен как был)
-let venueIdx = 0;
-let venueTimer = null;
-const venueSlides = document.querySelectorAll('.venue-slide');
-const dotsContainer = document.getElementById('venueDots');
+  // Form submit via fetch (no page reload, works with Google Forms)
+  document.getElementById('rsvpForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    const form = e.target;
+    const data = new FormData(form);
 
-venueSlides.forEach((_, i) => {
-  const dot = document.createElement('span');
-  if (i === 0) dot.classList.add('active');
-  dot.onclick = () => { goToSlide(i); resetTimer(); };
-  dotsContainer.appendChild(dot);
-});
+    const alcoholKey = 'entry.174804934';
+    data.delete(alcoholKey);
 
-function goToSlide(n) {
-  venueSlides[venueIdx].classList.remove('active');
-  dotsContainer.children[venueIdx].classList.remove('active');
-  venueIdx = (n + venueSlides.length) % venueSlides.length;
-  venueSlides[venueIdx].classList.add('active');
-  dotsContainer.children[venueIdx].classList.add('active');
-}
-function slideVenue(dir) { goToSlide(venueIdx + dir); resetTimer(); }
-function resetTimer() {
-  if (venueTimer) clearInterval(venueTimer);
-  venueTimer = setInterval(() => goToSlide(venueIdx + 1), 10000);
-}
-resetTimer();
-
-// Форма
-document.getElementById('rsvpForm').addEventListener('submit', function(e) {
-  e.preventDefault();
-  const form = e.target;
-  const data = new FormData(form);
-
-  const alcoholKey = 'entry.174804934';
-  data.delete(alcoholKey);
-
-  const noDrink = document.getElementById('noDrink');
-  if (noDrink && noDrink.checked) {
-    data.append(alcoholKey, 'Не буду пить');
-  } else {
-    form.querySelectorAll(`input[name="${alcoholKey}"]:checked`).forEach(cb => {
-      data.append(alcoholKey, cb.value);
-    });
-  }
-
-  const attendingRadio = form.querySelector('input[name="entry.1701093875"]:checked');
-  const attending = attendingRadio ? attendingRadio.value : '';
-  if (attendingRadio) data.append('entry.1701093875', attending);
-
-  const guestSelect = document.getElementById('guestCount');
-  if (guestSelect && guestSelect.value) {
-    data.append('entry.1572088507', guestSelect.value);
-  }
-
-  const partyRadio = form.querySelector('input[name="entry.669557655"]:checked');
-  if (partyRadio) data.append('entry.669557655', partyRadio.value);
-
-  const body = new URLSearchParams(data).toString();
-
-  fetch('https://docs.google.com/forms/d/e/1FAIpQLSdscf_k9vDtUivcVW2_vWUJImxdV9lE9xcD8hrbfaWBhIru7g/formResponse', {
-    method: 'POST',
-    mode: 'no-cors',
-    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-    body: body
-  }).then(() => showSuccess(attending))
-    .catch(() => showSuccess(attending));
-});
-
-function showSuccess(attending) {
-  document.getElementById('rsvpForm').style.display = 'none';
-  const msg = document.getElementById('successMsg');
-  msg.classList.add('show');
-  if (attending === 'Да, буду!') {
-    document.getElementById('successYes').style.display = 'block';
-  } else {
-    document.getElementById('successNo').style.display = 'block';
-  }
-}
-
-// Логика "Не буду пить"
-function updateAlcoholState() {
-  const isNotDrinking = document.getElementById('noDrink').checked;
-  document.querySelectorAll('.alcohol-grid input[type="checkbox"]').forEach(cb => {
-    if (cb.id !== 'noDrink') {
-      if (isNotDrinking) {
-        cb.checked = false;
-        cb.closest('label').style.opacity = '0.4';
-        cb.closest('label').style.pointerEvents = 'none';
-      } else {
-        cb.closest('label').style.opacity = '';
-        cb.closest('label').style.pointerEvents = '';
+    // FIX 2+4: Если выбрано "Не буду пить" — отправляем только это значение.
+    // Иначе собираем обычные чекбоксы + поле "Другое" (если заполнено).
+    const notDrinkingCb = form.querySelector('input[name="' + alcoholKey + '"][value="Не буду пить"]');
+    if (notDrinkingCb && notDrinkingCb.checked) {
+      data.append(alcoholKey, 'Не буду пить');
+    } else {
+      // Все отмеченные чекбоксы кроме "Не буду пить"
+      const checked = form.querySelectorAll('input[name="' + alcoholKey + '"]:checked');
+      checked.forEach(cb => {
+        if (cb.value !== 'Не буду пить') data.append(alcoholKey, cb.value);
+      });
+      // FIX 4: поле "Другое" — берём текст, а не пустое значение чекбокса
+      const otherInput = document.getElementById('otherInput');
+      const otherCheck = document.getElementById('otherCheck');
+      if (otherCheck && otherCheck.checked && otherInput && otherInput.value.trim()) {
+        data.append(alcoholKey, otherInput.value.trim());
       }
     }
-  });
-}
-document.getElementById('noDrink').addEventListener('change', updateAlcoholState);
 
-function toggleFields(show) {
-  const extra = document.getElementById('extraFields');
-  extra.style.display = show ? 'block' : 'none';
-  if (!show) {
-    extra.querySelectorAll('input, select').forEach(el => {
-      if (el.type === 'checkbox' || el.type === 'radio') el.checked = false;
-      else el.value = '';
+    // Radio — Придёте?
+    const radioAttend = form.querySelector('input[name="entry.1701093875"]:checked');
+    const attending = radioAttend ? radioAttend.value : '';
+    if (radioAttend) {
+      data.delete('entry.1701093875');
+      data.append('entry.1701093875', attending);
+    }
+
+    // FIX 3: Количество гостей — берём из select явно
+    const guestSelect = document.getElementById('guestCount');
+    if (guestSelect && guestSelect.value) {
+      data.delete('entry.1572088507');
+      data.append('entry.1572088507', guestSelect.value);
+    }
+
+    // Radio — Вечер в стиле 2017
+    const radio2017 = form.querySelector('input[name="entry.669557655"]:checked');
+    if (radio2017) {
+      data.delete('entry.669557655');
+      data.append('entry.669557655', radio2017.value);
+    }
+
+    // Строим тело запроса вручную чтобы дублирующиеся ключи сохранились
+    const parts = [];
+    for (const [key, val] of data.entries()) {
+      parts.push(encodeURIComponent(key) + '=' + encodeURIComponent(val));
+    }
+    const body = parts.join('&');
+
+    fetch('https://docs.google.com/forms/d/e/1FAIpQLSdscf_k9vDtUivcVW2_vWUJImxdV9lE9xcD8hrbfaWBhIru7g/formResponse', {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: body
+    }).then(() => {
+      showSuccess(attending);
+    }).catch(() => {
+      showSuccess(attending);
     });
-  } else {
-    updateAlcoholState();
+  });
+
+  // FIX 6: Показываем нужное уведомление в зависимости от ответа
+  function showSuccess(attending) {
+    const form = document.getElementById('rsvpForm');
+    const msg = document.getElementById('successMsg');
+    form.style.display = 'none';
+    msg.classList.add('show');
+    if (attending === 'Да, буду!') {
+      document.getElementById('successYes').style.display = 'block';
+    } else {
+      document.getElementById('successNo').style.display = 'block';
+    }
   }
-}
 </script>
+
+<script>
+  let venueIdx = 0;
+  let venueTimer = null;
+  const venueSlides = document.querySelectorAll('.venue-slide');
+  const dotsContainer = document.getElementById('venueDots');
+
+  // Create dots
+  venueSlides.forEach((_, i) => {
+    const dot = document.createElement('span');
+    if (i === 0) dot.classList.add('active');
+    dot.onclick = () => { goToSlide(i); resetTimer(); };
+    dotsContainer.appendChild(dot);
+  });
+
+  function goToSlide(n) {
+    venueSlides[venueIdx].classList.remove('active');
+    dotsContainer.children[venueIdx].classList.remove('active');
+    venueIdx = (n + venueSlides.length) % venueSlides.length;
+    venueSlides[venueIdx].classList.add('active');
+    dotsContainer.children[venueIdx].classList.add('active');
+  }
+
+  function slideVenue(dir) { goToSlide(venueIdx + dir); resetTimer(); }
+
+  function resetTimer() {
+    if (venueTimer) clearInterval(venueTimer);
+    venueTimer = setInterval(() => goToSlide(venueIdx + 1), 10000);
+  }
+
+  // Start auto-advance
+  resetTimer();
+</script>
+
+
+<script>
+  // FIX 2: Логика "Не буду пить" — блокирует остальные варианты
+  const notDrinkingCheckbox = document.querySelector('input[value="Не буду пить"]');
+  const alcoholGrid = document.querySelector('.alcohol-grid');
+
+  function updateAlcoholState() {
+    const isNotDrinking = notDrinkingCheckbox && notDrinkingCheckbox.checked;
+    const allAlcohol = alcoholGrid.querySelectorAll('input[type="checkbox"]');
+    allAlcohol.forEach(cb => {
+      if (cb.value !== 'Не буду пить' && cb.id !== 'otherCheck') {
+        if (isNotDrinking) {
+          cb.checked = false;
+          cb.closest('label').style.opacity = '0.4';
+          cb.closest('label').style.pointerEvents = 'none';
+        } else {
+          cb.closest('label').style.opacity = '';
+          cb.closest('label').style.pointerEvents = '';
+        }
+      }
+    });
+    // Закрываем "Другое" если "Не буду пить"
+    if (isNotDrinking) {
+      const otherCb = document.getElementById('otherCheck');
+      if (otherCb) { otherCb.checked = false; toggleOther(otherCb); }
+      const otherItem = document.getElementById('otherCheckItem');
+      if (otherItem) { otherItem.style.opacity = '0.4'; otherItem.style.pointerEvents = 'none'; }
+    } else {
+      const otherItem = document.getElementById('otherCheckItem');
+      if (otherItem) { otherItem.style.opacity = ''; otherItem.style.pointerEvents = ''; }
+    }
+  }
+
+  if (notDrinkingCheckbox) {
+    notDrinkingCheckbox.addEventListener('change', updateAlcoholState);
+  }
+
+  function toggleOther(cb) {
+    const inp = document.getElementById('otherInput');
+    inp.style.display = cb.checked ? 'block' : 'none';
+    if (!cb.checked) inp.value = '';
+  }
+</script>
+
+
+<script>
+  function toggleFields(show) {
+    const extra = document.getElementById('extraFields');
+    if (extra) {
+      extra.style.display = show ? 'block' : 'none';
+      // При скрытии — снимаем required и сбрасываем значения
+      extra.querySelectorAll('input, select, textarea').forEach(el => {
+        if (!show) {
+          el.removeAttribute('required');
+          if (el.type === 'radio' || el.type === 'checkbox') el.checked = false;
+          else el.value = '';
+        }
+      });
+      // Сбрасываем состояние алкоголя при повторном показе
+      if (show) updateAlcoholState();
+    }
+  }
+</script>
+
 </body>
 </html>
