@@ -7,14 +7,13 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Jost:wght@200;300;400&display=swap" rel="stylesheet">
 <style>
-  /* ... (весь стиль оставил без изменений) ... */
+  /* (весь стиль без изменений) */
 </style>
 </head>
 <body>
+<!-- ... весь HTML до формы (hero, venue, schedule, gift) остаётся прежним ... -->
 
-<!-- HERO, VENUE, SCHEDULE, GIFT — без изменений -->
-
-<!-- RSVP FORM -->
+<!-- RSVP FORM (обновлённая) -->
 <section class="form-section" style="margin-top: 80px;">
   <div class="section-title reveal">
     <h2>Подтвердите участие</h2>
@@ -96,98 +95,128 @@
   </div>
 </section>
 
-<!-- FOOTER -->
+<footer>
+  <span class="hearts">♡</span>
+  Ная &amp; Вадим · 29 августа 2026
+</footer>
 
 <script>
-// ... (все остальные скрипты: reveal, venue slider) ...
+  // Reveal on scroll (оставлено без изменений)
+  const reveals = document.querySelectorAll('.reveal');
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); io.unobserve(e.target); } });
+  }, { threshold: 0.05, rootMargin: '0px 0px -50px 0px' });
+  reveals.forEach(el => io.observe(el));
+  setTimeout(() => { reveals.forEach(el => el.classList.add('visible')); }, 1000);
 
-// Основная отправка формы
-document.getElementById('rsvpForm').addEventListener('submit', function(e) {
-  e.preventDefault();
-  const form = e.target;
-  const data = new FormData(form);
+  // Venue slider (без изменений)
+  let venueIdx = 0;
+  let venueTimer = null;
+  const venueSlides = document.querySelectorAll('.venue-slide');
+  const dotsContainer = document.getElementById('venueDots');
 
-  const alcoholKey = 'entry.174804934';
-  data.delete(alcoholKey);
-
-  const notDrinking = form.querySelector('#noDrink');
-  if (notDrinking && notDrinking.checked) {
-    data.append(alcoholKey, 'Не буду пить');
-  } else {
-    const checked = form.querySelectorAll('input[name="' + alcoholKey + '"]:checked');
-    checked.forEach(cb => data.append(alcoholKey, cb.value));
-  }
-
-  const radioAttend = form.querySelector('input[name="entry.1701093875"]:checked');
-  const attending = radioAttend ? radioAttend.value : '';
-  if (radioAttend) data.append('entry.1701093875', attending);
-
-  const guestSelect = document.getElementById('guestCount');
-  if (guestSelect && guestSelect.value) {
-    data.append('entry.1572088507', guestSelect.value);
-  }
-
-  const radio2017 = form.querySelector('input[name="entry.669557655"]:checked');
-  if (radio2017) data.append('entry.669557655', radio2017.value);
-
-  const body = new URLSearchParams(data).toString();
-
-  fetch('https://docs.google.com/forms/d/e/1FAIpQLSdscf_k9vDtUivcVW2_vWUJImxdV9lE9xcD8hrbfaWBhIru7g/formResponse', {
-    method: 'POST',
-    mode: 'no-cors',
-    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-    body: body
-  }).then(() => showSuccess(attending))
-    .catch(() => showSuccess(attending));
-});
-
-function showSuccess(attending) {
-  document.getElementById('rsvpForm').style.display = 'none';
-  const msg = document.getElementById('successMsg');
-  msg.classList.add('show');
-  if (attending === 'Да, буду!') {
-    document.getElementById('successYes').style.display = 'block';
-  } else {
-    document.getElementById('successNo').style.display = 'block';
-  }
-}
-
-// Логика "Не буду пить"
-function updateAlcoholState() {
-  const isNotDrinking = document.getElementById('noDrink').checked;
-  const checkboxes = document.querySelectorAll('.alcohol-grid input[type="checkbox"]');
-  
-  checkboxes.forEach(cb => {
-    if (cb.id !== 'noDrink') {
-      if (isNotDrinking) {
-        cb.checked = false;
-        cb.closest('label').style.opacity = '0.4';
-        cb.closest('label').style.pointerEvents = 'none';
-      } else {
-        cb.closest('label').style.opacity = '';
-        cb.closest('label').style.pointerEvents = '';
-      }
-    }
+  venueSlides.forEach((_, i) => {
+    const dot = document.createElement('span');
+    if (i === 0) dot.classList.add('active');
+    dot.onclick = () => { goToSlide(i); resetTimer(); };
+    dotsContainer.appendChild(dot);
   });
-}
 
-document.getElementById('noDrink').addEventListener('change', updateAlcoholState);
-
-// Toggle extra fields
-function toggleFields(show) {
-  const extra = document.getElementById('extraFields');
-  extra.style.display = show ? 'block' : 'none';
-  
-  if (!show) {
-    extra.querySelectorAll('input, select').forEach(el => {
-      if (el.type === 'checkbox' || el.type === 'radio') el.checked = false;
-      else el.value = '';
-    });
-  } else {
-    updateAlcoholState();
+  function goToSlide(n) {
+    venueSlides[venueIdx].classList.remove('active');
+    dotsContainer.children[venueIdx].classList.remove('active');
+    venueIdx = (n + venueSlides.length) % venueSlides.length;
+    venueSlides[venueIdx].classList.add('active');
+    dotsContainer.children[venueIdx].classList.add('active');
   }
-}
-</script>
 
+  function slideVenue(dir) { goToSlide(venueIdx + dir); resetTimer(); }
+  function resetTimer() {
+    if (venueTimer) clearInterval(venueTimer);
+    venueTimer = setInterval(() => goToSlide(venueIdx + 1), 10000);
+  }
+  resetTimer();
+
+  // Основная отправка формы
+  document.getElementById('rsvpForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    const form = e.target;
+    const data = new FormData(form);
+
+    const alcoholKey = 'entry.174804934';
+    data.delete(alcoholKey);
+
+    const notDrinkingCb = document.getElementById('noDrink');
+    if (notDrinkingCb && notDrinkingCb.checked) {
+      data.append(alcoholKey, 'Не буду пить');
+    } else {
+      const checked = form.querySelectorAll('input[name="' + alcoholKey + '"]:checked');
+      checked.forEach(cb => data.append(alcoholKey, cb.value));
+    }
+
+    const radioAttend = form.querySelector('input[name="entry.1701093875"]:checked');
+    const attending = radioAttend ? radioAttend.value : '';
+    if (radioAttend) data.append('entry.1701093875', attending);
+
+    const guestSelect = document.getElementById('guestCount');
+    if (guestSelect && guestSelect.value) {
+      data.append('entry.1572088507', guestSelect.value);
+    }
+
+    const radio2017 = form.querySelector('input[name="entry.669557655"]:checked');
+    if (radio2017) data.append('entry.669557655', radio2017.value);
+
+    const body = new URLSearchParams(data).toString();
+
+    fetch('https://docs.google.com/forms/d/e/1FAIpQLSdscf_k9vDtUivcVW2_vWUJImxdV9lE9xcD8hrbfaWBhIru7g/formResponse', {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+      body: body
+    }).then(() => showSuccess(attending)).catch(() => showSuccess(attending));
+  });
+
+  function showSuccess(attending) {
+    document.getElementById('rsvpForm').style.display = 'none';
+    const msg = document.getElementById('successMsg');
+    msg.classList.add('show');
+    if (attending === 'Да, буду!') {
+      document.getElementById('successYes').style.display = 'block';
+    } else {
+      document.getElementById('successNo').style.display = 'block';
+    }
+  }
+
+  // Логика "Не буду пить"
+  function updateAlcoholState() {
+    const isNotDrinking = document.getElementById('noDrink').checked;
+    document.querySelectorAll('.alcohol-grid input[type="checkbox"]').forEach(cb => {
+      if (cb.id !== 'noDrink') {
+        if (isNotDrinking) {
+          cb.checked = false;
+          cb.closest('label').style.opacity = '0.4';
+          cb.closest('label').style.pointerEvents = 'none';
+        } else {
+          cb.closest('label').style.opacity = '';
+          cb.closest('label').style.pointerEvents = '';
+        }
+      }
+    });
+  }
+  document.getElementById('noDrink').addEventListener('change', updateAlcoholState);
+
+  function toggleFields(show) {
+    const extra = document.getElementById('extraFields');
+    extra.style.display = show ? 'block' : 'none';
+    if (!show) {
+      extra.querySelectorAll('input, select').forEach(el => {
+        if (el.type === 'checkbox' || el.type === 'radio') el.checked = false;
+        else if (el.tagName === 'SELECT') el.value = '';
+      });
+    } else {
+      updateAlcoholState();
+    }
+  }
+</script>
 </body>
 </html>
